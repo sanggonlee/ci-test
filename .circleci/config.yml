@@ -27,4 +27,4 @@ jobs:
             python3 get-pip.py --user
             export PATH=$PATH:/home/circleci/.local/bin
             pip install awscli --upgrade --user
-            aws s3 cp data.txt s3://sanggon-test/foo/dataa.txt
+            aws s3 cp /home/circleci/project/data.txt s3://sanggon-test/foo/dataa.txt
