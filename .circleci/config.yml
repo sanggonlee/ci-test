@@ -25,3 +25,7 @@ jobs:
             pip install awscli --upgrade --user
       
       - run: echo Another greeting after installing dependencies.
+
+      - run:
+          name: Push file to S3
+          command: aws s3 sync ~/data.txt s3://sanggon-test/ --delete
