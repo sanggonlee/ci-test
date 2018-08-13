@@ -10,10 +10,6 @@ jobs:
           name: Install dependencies
           working_directory: /
           command: |
-            sudo apt-get -y -qq update
-            sudo apt-get -y -qq install python3
-            sudo curl -O https://bootstrap.pypa.io/get-pip.py
-            python3 get-pip.py --user
             export PATH=$PATH:/home/circleci/.local/bin
             pip install awscli --upgrade --user
 
