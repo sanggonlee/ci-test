@@ -1,8 +1,8 @@
 version: 2
 jobs:
   prepare:
-    machine:
-      enable: true
+    docker:
+      - image: circleci/python:3.6.1
 
     steps:
       - checkout
