@@ -25,6 +25,9 @@ jobs:
             pip install awscli --upgrade --user
 
   deploy:
+    machine:
+      enable: true
+
     steps:
       - checkout
       - run:
