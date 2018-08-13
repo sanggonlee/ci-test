@@ -15,7 +15,7 @@ jobs:
 
   deploy:
     machine:
-      enable: true
+      enabled: true
 
     steps:
       - checkout
