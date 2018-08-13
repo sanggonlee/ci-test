@@ -1,18 +1,11 @@
 version: 2
 jobs:
   prepare:
-    docker:
-      - image: circleci/openjdk:8-jdk
-
-    environment:
-      JVM_OPTS: -Xmx3200m
-      TERM: dumb
+    machine:
+      enable: true
 
     steps:
       - checkout
-      - run: echo Hello, I\'m running.
-      - run: echo `pwd`
-      - run: echo `ls`
       - run:
           name: Install dependencies
           working_directory: /
