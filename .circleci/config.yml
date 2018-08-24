@@ -1,6 +1,6 @@
 
 defaults: &defaults
-working_directory: ~/repo
+  working_directory: ~/repo
 
 version: 2
 jobs:
@@ -11,6 +11,7 @@ jobs:
       - run: echo Start
 
   build:
+    <<: *defaults
     machine:
       enabled: true
     steps:
@@ -23,6 +24,7 @@ jobs:
             - foo.txt
 
   prepare:
+    <<: *defaults
     docker:
       - image: circleci/python:3.6.1
 
