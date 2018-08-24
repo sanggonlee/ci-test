@@ -1,63 +1,45 @@
+defaults: &defaults
+  working_directory: /tmp
+  docker:
+    - image: buildpack-deps:jessie
+
 version: 2
 jobs:
-  log:
-    machine:
-      enabled: true
+  flow:
+    <<: *defaults
     steps:
-      - run: echo Start
-
-  build:
-    working_directory: /
-    docker:
-      - image: buildpack-deps:jessie
-    steps:
-      - run: pwd
       - run: mkdir -p workspace
-      - run: echo "fooo" > foo.txt
-      - run: cp foo.txt /tmp/foo.txt
+      - run: echo "Hello, world!" > workspace/echo-output
+      
+      # Persist the specified paths (workspace/echo-output) into the workspace for use in downstream job. 
       - persist_to_workspace:
-          root: /tmp
+          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is 
+	  # taken to be the root directory of the workspace.
+          root: workspace
+          # Must be relative path from root
           paths:
-            - foo.txt
+            - echo-output
 
-  prepare:
-    working_directory: /
-    docker:
-      - image: buildpack-deps:jessie
-
+  downstream:
+    <<: *defaults
     steps:
-      - checkout
-      - run: pwd
       - attach_workspace:
-          at: /tmp
-      - run: cat /tmp/foo.txt
-      - run:
-          name: Install dependencies
-          working_directory: /
-          command: |
-            export PATH=$PATH:/home/circleci/.local/bin
-            pip install awscli --upgrade --user
+          # Must be absolute path or relative path from working_directory
+          at: /tmp/workspace
 
-  deploy:
-    machine:
-      enabled: true
-
-    steps:
-      - checkout
-      - run:
-          name: Push to S3
-          command: |
-            aws s3 cp /home/circleci/project/data.txt s3://sanggon-test/foo/dataa.txt
+      - run: |
+          if [[ `cat /tmp/workspace/echo-output` == "Hello, world!" ]]; then
+            echo "It worked!";
+          else
+            echo "Nope!"; exit 1
+          fi
 
 workflows:
   version: 2
-  build-and-deploy:
+
+  btd:
     jobs:
-      - build
-      - prepare
-      - deploy:
+      - flow
+      - downstream:
           requires:
-            - prepare
-          filters:
-            branches:
-              only: master
+            - flow
