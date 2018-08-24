@@ -28,7 +28,7 @@ jobs:
       - run: pwd
       - attach_workspace:
           at: /tmp/workspace
-      - run: cat /tmp/foo.txt
+      - run: cat /tmp/workspace/foo.txt
       - run:
           name: Install dependencies
           working_directory: /
