@@ -1,40 +1,62 @@
-defaults: &defaults
-  working_directory: /tmp
-  docker:
-    - image: buildpack-deps:jessie
-
 version: 2
 jobs:
-  flow:
-    <<: *defaults
+  log:
+    machine:
+      enabled: true
     steps:
-      - run: mkdir -p workspace
-      - run: echo "Hello, world!" > workspace/echo-output
+      - run: echo Start
 
+  build:
+    working_directory: /tmp
+    docker:
+      - image: buildpack-deps:jessie
+    steps:
+      - run: pwd
+      - run: mkdir -p workspace
+      - run: echo "fooo" > workspace/foo.txt
       - persist_to_workspace:
           root: workspace
           paths:
-            - echo-output
+            - foo.txt
 
-  downstream:
-    <<: *defaults
+  prepare:
+    working_directory: /
+    docker:
+      - image: buildpack-deps:jessie
+
     steps:
+      - checkout
+      - run: pwd
       - attach_workspace:
           at: /tmp/workspace
+      - run: cat /tmp/foo.txt
+      - run:
+          name: Install dependencies
+          working_directory: /
+          command: |
+            export PATH=$PATH:/home/circleci/.local/bin
+            pip install awscli --upgrade --user
 
-      - run: |
-          if [[ `cat /tmp/workspace/echo-output` == "Hello, world!" ]]; then
-            echo "It worked!";
-          else
-            echo "Nope!"; exit 1
-          fi
+  deploy:
+    machine:
+      enabled: true
+
+    steps:
+      - checkout
+      - run:
+          name: Push to S3
+          command: |
+            aws s3 cp /home/circleci/project/data.txt s3://sanggon-test/foo/dataa.txt
 
 workflows:
   version: 2
-
-  btd:
+  build-and-deploy:
     jobs:
-      - flow
-      - downstream:
+      - build
+      - prepare
+      - deploy:
           requires:
-            - flow
+            - prepare
+          filters:
+            branches:
+              only: master
