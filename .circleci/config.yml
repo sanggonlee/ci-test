@@ -7,8 +7,8 @@ jobs:
       - run: echo Start
 
   build:
-    machine:
-      enabled: true
+    docker:
+      - image: buildpack-deps:jessie
     steps:
       - run: pwd
       - run: mkdir -p workspace
@@ -21,7 +21,7 @@ jobs:
 
   prepare:
     docker:
-      - image: circleci/python:3.6.1
+      - image: buildpack-deps:jessie
 
     steps:
       - checkout
