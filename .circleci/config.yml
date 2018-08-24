@@ -24,7 +24,7 @@ jobs:
 
     steps:
       - checkout
-      - run: cat /home/circleci/project/foo.txt
+      - run: cat /home/circleci/project/workspace/foo.txt
       - run:
           name: Install dependencies
           working_directory: /
