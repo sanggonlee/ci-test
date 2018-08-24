@@ -1,11 +1,24 @@
 version: 2
 jobs:
+  log:
+    machine:
+      enabled: true
+    steps:
+      run: echo Start
+
+  build:
+    machine:
+      enabled: true
+    steps:
+      run: touch foo.txt
+
   prepare:
     docker:
       - image: circleci/python:3.6.1
 
     steps:
       - checkout
+      - run: cat /home/circleci/project/foo.txt
       - run:
           name: Install dependencies
           working_directory: /
