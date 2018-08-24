@@ -24,6 +24,8 @@ jobs:
 
     steps:
       - checkout
+      - attach_workspace:
+          at: /home/circleci/project/workspace
       - run: cat /home/circleci/project/workspace/foo.txt
       - run:
           name: Install dependencies
