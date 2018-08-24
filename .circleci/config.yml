@@ -52,7 +52,7 @@ workflows:
   build-and-deploy:
     jobs:
       - build
-      - prepare
+      - prepare:
           requires:
             - build
       - deploy:
