@@ -1,7 +1,3 @@
-
-defaults: &defaults
-  working_directory: ~/repo
-
 version: 2
 jobs:
   log:
@@ -11,20 +7,19 @@ jobs:
       - run: echo Start
 
   build:
-    <<: *defaults
     machine:
       enabled: true
     steps:
       - run: pwd
       - run: mkdir -p workspace
-      - run: touch workspace/foo.txt
+      - run: echo "fooo" > foo.txt
+      - run: cp foo.txt /tmp/foo.txt
       - persist_to_workspace:
-          root: workspace
+          root: /tmp
           paths:
             - foo.txt
 
   prepare:
-    <<: *defaults
     docker:
       - image: circleci/python:3.6.1
 
@@ -32,8 +27,8 @@ jobs:
       - checkout
       - run: pwd
       - attach_workspace:
-          at: /home/circleci/project/repo/workspace
-      - run: cat /home/circleci/project/repo/workspace/foo.txt
+          at: /tmp
+      - run: cat /tmp/foo.txt
       - run:
           name: Install dependencies
           working_directory: /
