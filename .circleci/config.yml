@@ -11,6 +11,7 @@ jobs:
       enabled: true
     steps:
       - run: touch foo.txt
+      - run: pwd
 
   prepare:
     docker:
