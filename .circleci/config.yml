@@ -13,7 +13,7 @@ jobs:
       - run: mkdir -p workspace
       - run: touch workspace/foo.txt
       - run: pwd
-      - persist:
+      - persist_to_workspace:
           root: workspace
           paths:
             - foo.txt
