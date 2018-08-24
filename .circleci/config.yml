@@ -20,12 +20,11 @@ jobs:
             - foo.txt
 
   prepare:
-    working_directory: /
+    working_directory: /tmp
     docker:
       - image: buildpack-deps:jessie
 
     steps:
-      - checkout
       - run: pwd
       - attach_workspace:
           at: /tmp/workspace
