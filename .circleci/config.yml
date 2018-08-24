@@ -1,3 +1,7 @@
+
+defaults: &defaults
+working_directory: ~/repo
+
 version: 2
 jobs:
   log:
@@ -10,9 +14,9 @@ jobs:
     machine:
       enabled: true
     steps:
+      - run: pwd
       - run: mkdir -p workspace
       - run: touch workspace/foo.txt
-      - run: pwd
       - persist_to_workspace:
           root: workspace
           paths:
@@ -24,9 +28,10 @@ jobs:
 
     steps:
       - checkout
+      - run: pwd
       - attach_workspace:
-          at: /home/circleci/project/workspace
-      - run: cat /home/circleci/project/workspace/foo.txt
+          at: /home/circleci/project/repo/workspace
+      - run: cat /home/circleci/project/repo/workspace/foo.txt
       - run:
           name: Install dependencies
           working_directory: /
