@@ -12,12 +12,12 @@ jobs:
       - image: buildpack-deps:jessie
     steps:
       - run: pwd
-      - run: mkdir -p workspace
-      - run: echo "fooo" > workspace/foo.txt
+      - run: mkdir -p workspace/bar
+      - run: echo "fooo" > workspace/bar/foo.txt
       - persist_to_workspace:
           root: workspace
           paths:
-            - foo.txt
+            - bar/foo.txt
 
   prepare:
     working_directory: /tmp
@@ -28,7 +28,7 @@ jobs:
       - run: pwd
       - attach_workspace:
           at: /tmp/workspace
-      - run: cat /tmp/workspace/foo.txt
+      - run: cat /tmp/workspace/bar/foo.txt
       - run:
           name: Install dependencies
           working_directory: /
