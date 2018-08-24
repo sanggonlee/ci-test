@@ -4,13 +4,13 @@ jobs:
     machine:
       enabled: true
     steps:
-      run: echo Start
+      - run: echo Start
 
   build:
     machine:
       enabled: true
     steps:
-      run: touch foo.txt
+      - run: touch foo.txt
 
   prepare:
     docker:
