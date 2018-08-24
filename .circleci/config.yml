@@ -10,8 +10,13 @@ jobs:
     machine:
       enabled: true
     steps:
-      - run: touch foo.txt
+      - run: mkdir -p workspace
+      - run: touch workspace/foo.txt
       - run: pwd
+      - persist:
+          root: workspace
+          paths:
+            - foo.txt
 
   prepare:
     docker:
